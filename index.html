@@ -1,0 +1,450 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para El Amor De Mi Vida 🖤</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .font-handwriting {
+            font-family: 'Caveat', cursive;
+        }
+
+        .font-serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Estilos iOS Lockscreen */
+        .ios-blur {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+        }
+
+        .pin-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.2s ease;
+        }
+
+        .pin-dot.filled {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .num-btn {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 400;
+            transition: background 0.15s, transform 0.1s;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .num-btn:active {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0.92);
+        }
+
+        /* Animación Shake para error PIN */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-12px); }
+            40%, 80% { transform: translateX(12px); }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* Contenedor y estructura de la Caja Explosiva */
+        .box-wrapper {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .flap {
+            background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
+            border: 2px solid #fda4af;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.15), 0 10px 25px rgba(0,0,0,0.3);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 16px;
+            padding: 16px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Estado CERRADO de la caja */
+        .box-closed .flap-top {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            border-radius: 24px;
+            cursor: pointer;
+        }
+
+        /* Estado ABIERTO (EXPLOTADO) de la caja */
+        .box-open {
+            width: 100%;
+            max-width: 650px;
+            height: auto;
+        }
+
+        .box-open .flap-top {
+            position: relative;
+            width: 100%;
+            min-height: 160px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #be123c 0%, #881337 100%);
+            border-color: #f43f5e;
+            animation: flapPop 0.6s forwards;
+        }
+
+        .box-open .flap-style {
+            position: relative;
+            width: 100%;
+            min-height: 140px;
+            background: linear-gradient(135deg, #e11d48 0%, #9f1239 100%);
+            border-color: #fb7185;
+            animation: flapPop 0.7s forwards;
+        }
+
+        @keyframes flapPop {
+            0% { opacity: 0; transform: translateY(30px) scale(0.8); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Corazón pulsante central */
+        .heart-box {
+            animation: heartbeat 1.5s infinite alternate ease-in-out;
+            filter: drop-shadow(0 10px 20px rgba(225, 29, 72, 0.5));
+            cursor: pointer;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.12); }
+        }
+
+        /* Pergamino / Carta */
+        .letter-scroll {
+            background: #fff8f0;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 0);
+            background-size: 16px 16px;
+            color: #1e293b;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 2px solid #fbcfe8;
+        }
+
+        /* Partículas / Corazones flotantes */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            animation: particleFall 4s linear forwards;
+        }
+
+        @keyframes particleFall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="flex flex-col justify-center items-center relative min-h-screen bg-slate-950">
+
+    <!-- ========================================== -->
+    <!-- PANTALLA DE BLOQUEO ESTILO IPHONE (LOCKSCREEN) -->
+    <!-- ========================================== -->
+    <div id="lockScreen" class="fixed inset-0 z-50 flex flex-col justify-between items-center py-10 px-6 ios-blur transition-all duration-700">
+        
+        <!-- Encabezado / Fecha iOS -->
+        <div class="text-center pt-6">
+            <i class="fa-solid fa-lock text-white/80 text-xl mb-3" id="lockIcon"></i>
+            <h2 class="text-white text-base font-medium tracking-wide">Ingresa el código PIN</h2>
+            <p class="text-xs text-rose-300 mt-1 font-light">💡 Pista: La fecha especial</p>
+        </div>
+
+        <!-- Indicador de PIN de 8 dígitos -->
+        <div id="pinDots" class="flex gap-2.5 my-4">
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+        </div>
+
+        <!-- Teclado Numérico iOS -->
+        <div class="w-full max-w-xs grid grid-cols-3 gap-y-4 gap-x-6 justify-items-center mb-6">
+            <button onclick="pressNum('1')" class="num-btn">1</button>
+            <button onclick="pressNum('2')" class="num-btn">2<span class="text-[9px] text-white/50 -mt-1 tracking-widest">ABC</span></button>
+            <button onclick="pressNum('3')" class="num-btn">3<span class="text-[9px] text-white/50 -mt-1 tracking-widest">DEF</span></button>
+            
+            <button onclick="pressNum('4')" class="num-btn">4<span class="text-[9px] text-white/50 -mt-1 tracking-widest">GHI</span></button>
+            <button onclick="pressNum('5')" class="num-btn">5<span class="text-[9px] text-white/50 -mt-1 tracking-widest">JKL</span></button>
+            <button onclick="pressNum('6')" class="num-btn">6<span class="text-[9px] text-white/50 -mt-1 tracking-widest">MNO</span></button>
+            
+            <button onclick="pressNum('7')" class="num-btn">7<span class="text-[9px] text-white/50 -mt-1 tracking-widest">PQRS</span></button>
+            <button onclick="pressNum('8')" class="num-btn">8<span class="text-[9px] text-white/50 -mt-1 tracking-widest">TUV</span></button>
+            <button onclick="pressNum('9')" class="num-btn">9<span class="text-[9px] text-white/50 -mt-1 tracking-widest">WXYZ</span></button>
+            
+            <div class="w-16"></div>
+            <button onclick="pressNum('0')" class="num-btn">0</button>
+            <button onclick="deleteNum()" class="w-16 h-16 flex items-center justify-center text-white/80 active:text-white">
+                <i class="fa-solid fa-delete-left text-2xl"></i>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- ESCENA PRINCIPAL (CAJA EXPLOSIVA & CONTENIDO) -->
+    <!-- ========================================== -->
+    <main id="mainScene" class="w-full max-w-2xl px-4 py-8 flex flex-col items-center justify-center min-h-screen opacity-0 transition-opacity duration-1000 hidden">
+        
+        <!-- Instrucción superior -->
+        <div id="boxHint" class="text-center mb-6 animate-pulse">
+            <span class="bg-rose-500/20 text-rose-300 border border-rose-500/40 text-xs px-4 py-1.5 rounded-full uppercase tracking-wider font-semibold">
+                ✨ Toca la caja para abrirla ✨
+            </span>
+        </div>
+
+        <!-- Contenedor de la Caja Explosiva -->
+        <div id="boxContainer" class="box-wrapper box-closed" onclick="openExplodingBox()">
+            
+            <!-- SOLAPA 1: CONTADOR (Portada al estar cerrada / Arriba al abrir) -->
+            <div class="flap flap-top">
+                <!-- VISTA CERRADA (Tapa del Regalo) -->
+                <div class="closed-view flex flex-col items-center justify-center h-full">
+                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-3 text-3xl shadow-lg">
+                        🎁
+                    </div>
+                    <h2 class="font-serif-title text-xl font-bold">Un regalo para ti</h2>
+                    <p class="text-xs text-rose-100/80 mt-1">Tócame con amor</p>
+                </div>
+
+                <!-- VISTA ABIERTA (Solapa 1: Contador) -->
+                <div class="open-view hidden w-full">
+                    <div class="flex items-center justify-center gap-2 mb-2 text-rose-200">
+                        <i class="fa-solid fa-clock"></i>
+                        <span class="text-xs uppercase font-bold tracking-wider">Nuestro Primer Mes</span>
+                    </div>
+                    <p class="text-[11px] text-rose-100/90 mb-3">6 de Octubre, 2026 (3:56 PM) - 6 de Noviembre, 2026</p>
+                    
+                    <div class="grid grid-cols-4 gap-2 text-center">
+                        <div class="bg-black/30 p-2 rounded-xl border border-white/10">
+                            <span id="cDays" class="text-xl font-extrabold block text-rose-300">31</span>
+                            <span class="text-[9px] uppercase tracking-wider text-slate-300">Días</span>
+                        </div>
+                        <div class="bg-black/30 p-2 rounded-xl border border-white/10">
+                            <span id="cHours" class="text-xl font-extrabold block text-rose-300">00</span>
+                            <span class="text-[9px] uppercase tracking-wider text-slate-300">Horas</span>
+                        </div>
+                        <div class="bg-black/30 p-2 rounded-xl border border-white/10">
+                            <span id="cMins" class="text-xl font-extrabold block text-rose-300">00</span>
+                            <span class="text-[9px] uppercase tracking-wider text-slate-300">Min</span>
+                        </div>
+                        <div class="bg-black/30 p-2 rounded-xl border border-white/10">
+                            <span id="cSecs" class="text-xl font-extrabold block text-rose-300">00</span>
+                            <span class="text-[9px] uppercase tracking-wider text-slate-300">Seg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CENTRO DE LA CAJA (Cajita de Corazón Rosada) -->
+            <div id="centerHeartBox" class="hidden my-6 w-full flex flex-col items-center justify-center cursor-pointer" onclick="openLetter(event)">
+                <div class="heart-box bg-gradient-to-tr from-pink-500 to-rose-400 p-6 rounded-full text-white shadow-2xl border-4 border-pink-200 flex flex-col items-center justify-center w-28 h-28">
+                    <i class="fa-solid fa-heart text-4xl text-rose-100 mb-1"></i>
+                    <span class="text-[10px] font-bold tracking-wider text-white uppercase">Tócame</span>
+                </div>
+                <span class="text-xs text-pink-300 mt-2 font-medium bg-pink-950/60 px-3 py-1 rounded-full border border-pink-500/30">
+                    Abre la carta aquí 💌
+                </span>
+            </div>
+
+            <!-- GRID PARA LAS 3 SOLAPAS CON FRASES DE AMOR -->
+            <div id="flapsGrid" class="hidden grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+                
+                <!-- SOLAPA 2: Frase de Amor -->
+                <div class="flap flap-style">
+                    <i class="fa-solid fa-quote-left text-rose-300 text-lg mb-2"></i>
+                    <p class="text-xs md:text-sm font-medium italic leading-relaxed text-rose-50">
+                        "Encontré en ti todo lo que no sabía que necesitaba. Gracias por hacer de cada día un momento único."
+                    </p>
+                    <div class="mt-2 text-[10px] text-rose-200 uppercase font-semibold">✨ Eres mi refugio</div>
+                </div>
+
+                <!-- SOLAPA 3: Frase de Amor -->
+                <div class="flap flap-style">
+                    <i class="fa-solid fa-star text-rose-300 text-lg mb-2"></i>
+                    <p class="text-xs md:text-sm font-medium italic leading-relaxed text-rose-50">
+                        "Mi lugar favorito en el mundo es a tu lado, escuchando tu risa y sintiendo tu paciencia infinita."
+                    </p>
+                    <div class="mt-2 text-[10px] text-rose-200 uppercase font-semibold">💖 Cada día más</div>
+                </div>
+
+                <!-- SOLAPA 4: Frase de Amor -->
+                <div class="flap flap-style">
+                    <i class="fa-solid fa-infinity text-rose-300 text-lg mb-2"></i>
+                    <p class="text-xs md:text-sm font-medium italic leading-relaxed text-rose-50">
+                        "Este primer mes es solo el comienzo de la hermosa historia que seguiremos construyendo juntos."
+                    </p>
+                    <div class="mt-2 text-[10px] text-rose-200 uppercase font-semibold">🖤 Infinito amor</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ========================================== -->
+    <!-- MODAL DE LA CARTA ENROLLADA (PERGAMINO) -->
+    <!-- ========================================== -->
+    <div id="letterModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-500">
+        
+        <div class="letter-scroll relative w-full max-w-lg max-h-[85vh] rounded-2xl p-6 md:p-8 overflow-y-auto transform scale-90 transition-all duration-500 my-auto">
+            
+            <!-- Botón Cerrar -->
+            <button onclick="closeLetter()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center hover:bg-rose-200 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Encabezado Carta -->
+            <div class="text-center border-b border-rose-200 pb-4 mb-4">
+                <span class="text-xs uppercase tracking-widest text-rose-500 font-bold">Carta de Primer Mes</span>
+                <h3 class="font-serif-title text-2xl font-bold text-slate-800 mt-1">Para El Amor De Mi Vida 🖤</h3>
+            </div>
+
+            <!-- Texto exacto solicitado -->
+            <div class="font-handwriting text-xl md:text-2xl leading-relaxed text-slate-800 space-y-4 whitespace-pre-line">
+Hoy amor ya cumplimos nuestro primer mes, y espero q sea el primero de muchos más, por q no quiero que esto acabe. En este tiempo q te he conocido y q soy tú novia me he sentido muy feliz, me encanta la forma en la q me tratas, en la q me das amor, en la q me entiendes. Nunca nadie me había tenido tanta paciencia como tú la tienes conmigo.
+
+Se q no soy la mejor novia, estoy intentando cambiar por tí, para ser mejor persona.Se q a veces la embarró, y la cago muy feo, y quizás pienses q no me importa lo q hago o en q te afecta. 
+
+Hace mucho no sentía este amor como el que siento por tí, es sincero, y cada día te amo más. No me cansaría de amarte, por q sé q te mereces todo el amor q te puedo dar.
+
+Gracias por estar conmigo, y por quererme así como soy.
+
+Te amo mucho y feliz primer mes.
+            </div>
+
+            <!-- Firma Carta -->
+            <div class="mt-6 pt-4 border-t border-rose-200 flex justify-between items-center text-sm font-semibold text-rose-700">
+                <span>DE: Bry</span>
+                <span>PARA: Él amor de mi vida 🖤</span>
+            </div>
+
+            <div class="text-center mt-6">
+                <button onclick="closeLetter()" class="bg-rose-500 text-white text-xs font-semibold px-6 py-2.5 rounded-full shadow-md hover:bg-rose-600 transition">
+                    Guardar en el corazón ❤️
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT DE LÓGICA E INTERACCIÓN -->
+    <!-- ========================================== -->
+    <script>
+        // CONFIGURACIÓN PIN
+        const CORRECT_PIN = "06102026";
+        let currentPin = "";
+
+        // Elementos DOM
+        const pinDots = document.querySelectorAll('.pin-dot');
+        const lockScreen = document.getElementById('lockScreen');
+        const lockIcon = document.getElementById('lockIcon');
+        const mainScene = document.getElementById('mainScene');
+        const boxContainer = document.getElementById('boxContainer');
+
+        // Lógica Teclado PIN
+        function pressNum(num) {
+            if (currentPin.length < 8) {
+                currentPin += num;
+                updateDots();
+
+                if (currentPin.length === 8) {
+                    setTimeout(checkPin, 200);
+                }
+            }
+        }
+
+        function deleteNum() {
+            if (currentPin.length > 0) {
+                currentPin = currentPin.slice(0, -1);
+                updateDots();
+            }
+        }
+
+        function updateDots() {
+            pinDots.forEach((dot, index) => {
+                if (index < currentPin.length) {
+                    dot.classList.add('filled');
+                } else {
+                    dot.classList.remove('filled');
+                }
+            });
+        }
+
+        function checkPin() {
+            if (currentPin === CORRECT_PIN) {
+                // PIN Correcto
+                lockIcon.className = "fa-solid fa-lock-open text-emerald-400 text-xl mb-3";
+                lockScreen.style.opacity = '0';
+                lockScreen.style.pointerEvents = 'none';
+
+                setTimeout(() => {
+                    lockScreen.classList.add('hidden');
+                    mainScene.classList.remove('hidden');
+                    setTimeout(() => {
+                        mainScene.style.opacity = '1';
+                        createLoverConfetti();
+                    }, 50);
+                }, 700);
+
+            } else {
+                // PIN Incorrecto
+                const dotsContainer = document.getElementById('pinDots');
+                dotsCont
